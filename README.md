@@ -5,223 +5,127 @@
 [![iCloud](https://img.shields.io/badge/iCloud-Photos-3693F3?logo=icloud&logoColor=white)](https://www.icloud.com/)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
-A command-line tool to **bulk download iCloud Photos** by date, month, or date range. Wrapper around [icloudpd](https://github.com/icloud-photos-downloader/icloud_photos_downloader) with an intuitive interface and automatic date handling.
+**Bulk download and backup iCloud Photos to your Mac.** Export iPhone photos by date, month, or range. Convert HEIC to JPG. Simple CLI wrapper for [icloudpd](https://github.com/icloud-photos-downloader/icloud_photos_downloader).
 
-## Features
-
-### Photo Export (`icloud_photo_export.sh`)
-- **Download by month** — `2025-07` downloads all photos from July 2025
-- **Download by day** — `2025-07-15` downloads photos from a specific day
-- **Download date ranges** — `2025-07 --to 2025-09` downloads July through September
-- **Auto-detection** — Format determines mode (no subcommands needed)
-- **Organized output** — Automatic folder structure by date/range
-- **Videos optional** — Skip videos by default, include with `-v` flag
-
-### HEIC Converter (`convert_heic.sh`)
-- **Recursive conversion** — Finds all HEIC/HEIF files in a directory tree
-- **Zero dependencies** — Uses macOS built-in `sips`
-- **Auto-cleanup** — Deletes originals after conversion (optional)
-- **Dry-run mode** — Preview what would be converted
-- **Skip existing** — Won't overwrite existing JPG files
-
-### Both Scripts
-- **Colorized output** — Professional CLI with configuration summary
-- **Validation** — Input checking with clear error messages
-
-## Installation
-
-### Prerequisites
-
-1. **macOS** (uses BSD `date` command)
-2. **Python 3** with pip
-3. **icloudpd** installed globally:
-
-```bash
-pip install icloudpd
-```
-
-### Setup
-
-```bash
-git clone https://github.com/YOUR_USERNAME/icloud-photo-export.git
-cd icloud-photo-export
-chmod +x icloud_photo_export.sh convert_heic.sh
-```
-
-## Usage
-
-```bash
-./icloud_photo_export.sh <date> -a <email> -o <dir> [OPTIONS]
-```
-
-### Date Formats
-
-| Format | Mode | Example |
-|--------|------|---------|
-| `YYYY-MM` | Entire month | `2025-07` |
-| `YYYY-MM-DD` | Single day | `2025-07-15` |
-
-### Required
-
-| Option | Description |
-|--------|-------------|
-| `-a, --account <email>` | Apple ID / iCloud email address |
-| `-o, --output <dir>` | Base output directory |
-
-### Options
-
-| Option | Description |
-|--------|-------------|
-| `--to <date>` | End date for range (same format as start) |
-| `-v, --include-videos` | Include videos and Live Photos (default: photos only) |
-| `-h, --help` | Show help message |
-
-### Examples
+## How to Download iCloud Photos
 
 ```bash
 # Download all photos from July 2025
 ./icloud_photo_export.sh 2025-07 -a your@email.com -o ~/Photos
 
-# Download photos from a specific day
-./icloud_photo_export.sh 2025-07-15 -a your@email.com -o ~/Photos
-
-# Download July through September 2025
+# Download a date range
 ./icloud_photo_export.sh 2025-07 --to 2025-09 -a your@email.com -o ~/Photos
 
-# Include videos and Live Photos
-./icloud_photo_export.sh 2025-07 -a your@email.com -o ~/Photos -v
+# Convert HEIC to JPG
+./convert_heic.sh -i ~/Photos/2025-07
 ```
 
----
+## Features
 
-## HEIC Converter
+| Script | What it does |
+|--------|--------------|
+| `icloud_photo_export.sh` | Download iCloud Photos by month, day, or date range |
+| `convert_heic.sh` | Batch convert HEIC/HEIF to JPG using macOS `sips` |
 
-Convert HEIC/HEIF files to JPG format.
+- **Date-based downloads** — Specify `YYYY-MM` (month) or `YYYY-MM-DD` (day)
+- **Range support** — Use `--to` for multi-month or multi-day ranges
+- **HEIC to JPG** — Convert iPhone photos to universal JPG format
+- **Zero dependencies** — Uses macOS built-in tools + icloudpd
+- **Organized output** — Auto-creates folders like `2025-07/` or `2025-07_to_2025-09/`
 
-### Usage
+## Installation
 
 ```bash
-./convert_heic.sh --input-dir <directory> [OPTIONS]
+# Install icloudpd
+pip install icloudpd
+
+# Clone and setup
+git clone https://github.com/YOUR_USERNAME/icloud-photo-export.git
+cd icloud-photo-export
+chmod +x *.sh
 ```
 
-### Options
+## Photo Export Usage
+
+```bash
+./icloud_photo_export.sh <date> -a <email> -o <dir> [OPTIONS]
+```
 
 | Option | Description |
 |--------|-------------|
-| `-i, --input-dir <dir>` | Directory to recursively search (required) |
-| `-k, --keep-originals` | Keep original HEIC files after conversion |
-| `-d, --dry-run` | Preview what would be converted |
-| `-h, --help` | Show help message |
+| `-a, --account` | Apple ID email (required) |
+| `-o, --output` | Output directory (required) |
+| `--to <date>` | End date for range downloads |
+| `-v, --include-videos` | Include videos and Live Photos |
+| `-h, --help` | Show help |
 
 ### Examples
 
 ```bash
-# Convert all HEIC files, delete originals
-./convert_heic.sh --input-dir ~/Photos/2025-07
+# Single month
+./icloud_photo_export.sh 2025-07 -a you@email.com -o ~/Photos
 
-# Convert but keep original HEIC files
-./convert_heic.sh -i ~/Photos/2025-07 --keep-originals
+# Single day
+./icloud_photo_export.sh 2025-07-15 -a you@email.com -o ~/Photos
 
-# Preview what would be converted
-./convert_heic.sh -i ~/Photos --dry-run
+# Month range (July-September)
+./icloud_photo_export.sh 2025-07 --to 2025-09 -a you@email.com -o ~/Photos
+
+# Include videos
+./icloud_photo_export.sh 2025-07 -a you@email.com -o ~/Photos -v
 ```
 
-### Workflow
-
-Typical workflow after downloading from iCloud:
+## HEIC Converter Usage
 
 ```bash
-# 1. Download photos
-./icloud_photo_export.sh 2025-07 -a your@email.com -o ~/Photos
+./convert_heic.sh -i <directory> [OPTIONS]
+```
 
-# 2. Convert HEIC to JPG
+| Option | Description |
+|--------|-------------|
+| `-i, --input-dir` | Directory to scan (required) |
+| `-k, --keep-originals` | Don't delete HEIC files after conversion |
+| `-d, --dry-run` | Preview without converting |
+
+### Examples
+
+```bash
+# Convert and delete originals
 ./convert_heic.sh -i ~/Photos/2025-07
-```
 
----
+# Keep originals
+./convert_heic.sh -i ~/Photos/2025-07 --keep-originals
 
-## Output Structure
-
-Photos are organized into date-based folders:
-
-```
-~/Dropbox/iphotos/
-├── 2025-07/                    # Single month
-├── 2025-07-15/                 # Single day
-├── 2025-07_to_2025-09/         # Month range
-└── 2025-07-01_to_2025-07-15/   # Day range
+# Preview first
+./convert_heic.sh -i ~/Photos/2025-07 --dry-run
 ```
 
 ## Authentication
 
-On first run, you'll be prompted for:
+On first run, enter your iCloud password and 2FA code. Sessions are cached in `~/.pyicloud`.
 
-1. **iCloud password** — Enter your Apple ID password
-2. **2FA code** — Enter the code sent to your trusted devices
-
-Session tokens are cached in `~/.pyicloud` for subsequent runs (typically valid for several weeks).
-
-### Auth-only mode
-
-To authenticate without downloading:
-
+To re-authenticate:
 ```bash
-icloudpd --auth-only --username your@email.com
+rm -rf ~/.pyicloud
 ```
-
-## Configuration
-
-Default settings (edit in script):
-
-```bash
-EMAIL="craigtrim@gmail.com"           # Your Apple ID
-BASE_DIR="$HOME/Dropbox/iphotos"      # Default output directory
-INCLUDE_VIDEOS=false                   # Skip videos by default
-```
-
-## How It Works
-
-This script wraps [icloudpd](https://github.com/icloud-photos-downloader/icloud_photos_downloader) and:
-
-1. Parses your date input to determine download mode
-2. Calculates the exact date range (including month boundaries)
-3. Creates an organized output folder
-4. Calls `icloudpd` with the appropriate `--skip-created-before` and `--skip-created-after` flags
 
 ## Troubleshooting
 
-### "Session expired" or authentication errors
+| Problem | Solution |
+|---------|----------|
+| Session expired | Delete `~/.pyicloud` and re-run |
+| No photos found | Verify date range has photos in iCloud |
+| Videos not downloading | Add `-v` flag |
 
-Delete the cached session and re-authenticate:
+## Related
 
-```bash
-rm -rf ~/.pyicloud
-./icloud_photo_export.sh 2025-07
-```
-
-### "No photos found"
-
-- Verify the date range contains photos in your iCloud library
-- Check that your iCloud Photos sync is enabled
-- Try running `icloudpd --list-albums --username your@email.com` to verify access
-
-### Videos not downloading
-
-Add the `-v` or `--include-videos` flag:
-
-```bash
-./icloud_photo_export.sh 2025-07 -v
-```
-
-## Related Projects
-
-- [icloudpd](https://github.com/icloud-photos-downloader/icloud_photos_downloader) — The underlying download tool
-- [pyicloud](https://github.com/picklepete/pyicloud) — Python iCloud API library
+- [icloudpd](https://github.com/icloud-photos-downloader/icloud_photos_downloader) — Underlying download engine
+- [pyicloud](https://github.com/picklepete/pyicloud) — Python iCloud API
 
 ## License
 
-MIT License - see [LICENSE](LICENSE) for details.
+MIT
 
 ---
 
-**Keywords**: icloud photos download, icloud backup, apple photos export, icloud photo downloader, bulk download icloud, icloud cli, macos photo backup, icloudpd wrapper
+<sub>**Keywords**: download icloud photos, backup iphone photos to mac, export icloud photos, icloud photo downloader, bulk download icloud, heic to jpg mac, convert heic to jpeg, icloudpd wrapper, apple photos backup, icloud cli tool, macos photo export</sub>

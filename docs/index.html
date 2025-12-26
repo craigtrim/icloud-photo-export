@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>iCloud Photo Export - Download & Backup iCloud Photos to Mac</title>
+    <meta name="description" content="Bulk download and backup iCloud Photos to your Mac. Export iPhone photos by date, month, or range. Convert HEIC to JPG. Free CLI tool.">
+    <meta name="keywords" content="icloud photos download, backup iphone photos, export icloud photos, heic to jpg, icloud backup, macos photo export">
+    <meta name="author" content="Craig Trim">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="iCloud Photo Export">
+    <meta property="og:description" content="Bulk download iCloud Photos to your Mac. Export by date, month, or range. Convert HEIC to JPG.">
+    <meta property="og:type" content="website">
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="iCloud Photo Export">
+    <meta name="twitter:description" content="Bulk download iCloud Photos to your Mac. Export by date, month, or range. Convert HEIC to JPG.">
+
+    <style>
+        :root {
+            --bg: #0d1117;
+            --fg: #c9d1d9;
+            --accent: #58a6ff;
+            --accent2: #3fb950;
+            --muted: #8b949e;
+            --border: #30363d;
+            --code-bg: #161b22;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+            background: var(--bg);
+            color: var(--fg);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        header {
+            text-align: center;
+            padding: 3rem 0;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 2rem;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .tagline {
+            color: var(--muted);
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .badges {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            background: var(--code-bg);
+            border: 1px solid var(--border);
+            padding: 0.25rem 0.75rem;
+            border-radius: 2rem;
+            font-size: 0.85rem;
+            color: var(--muted);
+        }
+
+        h2 {
+            color: var(--accent);
+            margin: 2rem 0 1rem;
+            font-size: 1.5rem;
+        }
+
+        pre {
+            background: var(--code-bg);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 1rem;
+            overflow-x: auto;
+            margin: 1rem 0;
+        }
+
+        code {
+            font-family: 'SF Mono', Monaco, 'Courier New', monospace;
+            font-size: 0.9rem;
+            color: var(--accent2);
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .feature {
+            background: var(--code-bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1.25rem;
+        }
+
+        .feature h3 {
+            color: var(--accent);
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .feature p {
+            color: var(--muted);
+            font-size: 0.9rem;
+        }
+
+        .cta {
+            text-align: center;
+            padding: 2rem 0;
+            margin-top: 2rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .btn {
+            display: inline-block;
+            background: var(--accent);
+            color: var(--bg);
+            padding: 0.75rem 2rem;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            margin: 0.5rem;
+            transition: opacity 0.2s;
+        }
+
+        .btn:hover {
+            opacity: 0.9;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--fg);
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem 0;
+            color: var(--muted);
+            font-size: 0.85rem;
+        }
+
+        footer a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        .scripts {
+            margin: 1.5rem 0;
+        }
+
+        .script {
+            background: var(--code-bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+
+        .script-name {
+            color: var(--accent2);
+            font-family: monospace;
+            font-weight: 600;
+        }
+
+        .script-desc {
+            color: var(--muted);
+            font-size: 0.9rem;
+            margin-top: 0.25rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>iCloud Photo Export</h1>
+            <p class="tagline">Bulk download & backup iCloud Photos to your Mac</p>
+            <div class="badges">
+                <span class="badge">macOS</span>
+                <span class="badge">Bash</span>
+                <span class="badge">Free & Open Source</span>
+            </div>
+        </header>
+
+        <main>
+            <h2>Quick Start</h2>
+            <pre><code># Install dependency
+pip install icloudpd
+
+# Download photos from July 2025
+./icloud_photo_export.sh 2025-07 -a your@email.com -o ~/Photos
+
+# Convert HEIC to JPG
+./convert_heic.sh -i ~/Photos/2025-07</code></pre>
+
+            <h2>What's Included</h2>
+            <div class="scripts">
+                <div class="script">
+                    <div class="script-name">icloud_photo_export.sh</div>
+                    <div class="script-desc">Download iCloud Photos by month, day, or date range</div>
+                </div>
+                <div class="script">
+                    <div class="script-name">convert_heic.sh</div>
+                    <div class="script-desc">Batch convert HEIC/HEIF to JPG using macOS sips</div>
+                </div>
+            </div>
+
+            <h2>Features</h2>
+            <div class="features">
+                <div class="feature">
+                    <h3>Date-Based Downloads</h3>
+                    <p>Download by month (2025-07) or specific day (2025-07-15)</p>
+                </div>
+                <div class="feature">
+                    <h3>Range Support</h3>
+                    <p>Use --to for multi-month or multi-day ranges</p>
+                </div>
+                <div class="feature">
+                    <h3>HEIC to JPG</h3>
+                    <p>Convert iPhone photos to universal JPG format</p>
+                </div>
+                <div class="feature">
+                    <h3>Zero Dependencies</h3>
+                    <p>Uses macOS built-in tools + icloudpd</p>
+                </div>
+            </div>
+
+            <h2>Examples</h2>
+            <pre><code># Single month
+./icloud_photo_export.sh 2025-07 -a you@email.com -o ~/Photos
+
+# Date range (July - September)
+./icloud_photo_export.sh 2025-07 --to 2025-09 -a you@email.com -o ~/Photos
+
+# Include videos and Live Photos
+./icloud_photo_export.sh 2025-07 -a you@email.com -o ~/Photos -v
+
+# Convert HEIC, keep originals
+./convert_heic.sh -i ~/Photos/2025-07 --keep-originals</code></pre>
+
+            <div class="cta">
+                <a href="https://github.com/craigtrim/icloud-photo-export" class="btn">View on GitHub</a>
+                <a href="https://github.com/craigtrim/icloud-photo-export/archive/refs/heads/main.zip" class="btn btn-secondary">Download ZIP</a>
+            </div>
+        </main>
+
+        <footer>
+            <p>MIT License &middot; Built by <a href="https://github.com/craigtrim">Craig Trim</a></p>
+            <p>Wraps <a href="https://github.com/icloud-photos-downloader/icloud_photos_downloader">icloudpd</a></p>
+        </footer>
+    </div>
+</body>
+</html>
